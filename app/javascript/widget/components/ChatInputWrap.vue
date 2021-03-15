@@ -120,8 +120,9 @@ export default {
     toggleEmojiPicker() {
       this.showEmojiPicker = !this.showEmojiPicker;
     },
-    hideEmojiPicker() {
+    hideEmojiPicker(e) {
       if (this.showEmojiPicker) {
+        e.stopPropagation();
         this.toggleEmojiPicker();
       }
     },
