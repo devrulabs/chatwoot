@@ -109,6 +109,7 @@ export default {
         this.onSendMessage(this.userInput);
       }
       this.userInput = '';
+      this.focusInput();
     },
     handleEnterKeyPress(e) {
       if (e.keyCode === 13 && !e.shiftKey) {
