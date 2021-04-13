@@ -1,27 +1,37 @@
 <template>
-  <div class="chat-message--input">
+  <div
+    class="chat-message--input"
+    @keydown.esc="hideEmojiPicker"
+  >
     <resizable-text-area
       v-model="userInput"
       :placeholder="$t('CHAT_PLACEHOLDER')"
       class="form-input user-message-input"
+      id="chat-input"
       @typing-off="onTypingOff"
       @typing-on="onTypingOn"
+      :aria-label="$t('CHAT_PLACEHOLDER')"
     />
     <div class="button-wrap">
       <chat-attachment-button
         v-if="showAttachment"
         :on-attach="onSendAttachment"
       />
+      <button
+        v-if="hasEmojiPickerEnabled"
+        class="emoji-toggle"
+        @click="toggleEmojiPicker()"
+        aria-label="Emoji picker"
+      >
+        <i
+          class="icon ion-happy-outline"
+          :class="{ active: showEmojiPicker }"
+        />
+      </button>
       <emoji-input
         v-if="showEmojiPicker"
         v-on-clickaway="hideEmojiPicker"
         :on-click="emojiOnClick"
-      />
-      <i
-        v-if="hasEmojiPickerEnabled"
-        class="emoji-toggle icon ion-happy-outline"
-        :class="{ active: showEmojiPicker }"
-        @click="toggleEmojiPicker()"
       />
       <chat-send-button
         v-if="showSendButton"
@@ -78,6 +88,9 @@ export default {
     showSendButton() {
       return this.userInput.length > 0;
     },
+    isOpen() {
+      return this.$store.state.events.isOpen;
+    }
   },
 
   destroyed() {
@@ -85,6 +98,9 @@ export default {
   },
   mounted() {
     document.addEventListener('keypress', this.handleEnterKeyPress);
+    if(this.isOpen) {
+      this.focusInput();
+    }
   },
 
   methods: {
@@ -93,6 +109,7 @@ export default {
         this.onSendMessage(this.userInput);
       }
       this.userInput = '';
+      this.focusInput();
     },
     handleEnterKeyPress(e) {
       if (e.keyCode === 13 && !e.shiftKey) {
@@ -103,8 +120,9 @@ export default {
     toggleEmojiPicker() {
       this.showEmojiPicker = !this.showEmojiPicker;
     },
-    hideEmojiPicker() {
+    hideEmojiPicker(e) {
       if (this.showEmojiPicker) {
+        e.stopPropagation();
         this.toggleEmojiPicker();
       }
     },
@@ -120,22 +138,36 @@ export default {
     toggleTyping(typingStatus) {
       this.$store.dispatch('conversation/toggleUserTyping', { typingStatus });
     },
+    focusInput() {
+      document.getElementById('chat-input').focus();
+    }
   },
+
+  watch: {
+    isOpen(isOpen) {
+      if(isOpen) {
+        this.focusInput();
+      }
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
 @import '~widget/assets/scss/variables.scss';
+@import '~widget/assets/scss/mixins.scss';
 
 .chat-message--input {
   align-items: center;
   display: flex;
+  padding: 0 $space-slab;
 }
 
 .emoji-toggle {
-  font-size: $font-size-large;
+  @include button-size;
+
+  font-size: $font-size-big;
   color: $color-gray;
-  padding-right: $space-smaller;
   cursor: pointer;
 }
 
@@ -150,6 +182,7 @@ export default {
 .button-wrap {
   display: flex;
   align-items: center;
+  padding-left: $space-small;
 }
 
 .user-message-input {
@@ -158,6 +191,9 @@ export default {
   min-height: $space-large;
   max-height: 2.4 * $space-mega;
   resize: none;
+  padding: 0;
   padding-top: $space-small;
+  margin-top: $space-small;
+  margin-bottom: $space-small;
 }
 </style>
