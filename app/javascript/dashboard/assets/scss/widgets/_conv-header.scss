@@ -50,7 +50,7 @@ $resolve-button-width: 13.2rem;
       align-items: flex-start;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       margin-left: $space-slab;
     }
 
@@ -61,7 +61,6 @@ $resolve-button-width: 13.2rem;
     }
   }
 }
-
 
 .header-actions-wrap {
   display: flex;
