@@ -63,3 +63,6 @@ test/cypress/videos/*
 
 /config/master.key
 /config/*.enc
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

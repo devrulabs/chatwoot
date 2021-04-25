@@ -14,7 +14,7 @@
   "dependencies": {
     "@chatwoot/prosemirror-schema": "https://github.com/chatwoot/prosemirror-schema.git#7e8acadd10d7b932c0dc0bd0a18f804434f83517",
     "@rails/actioncable": "^6.0.0",
-    "@rails/webpacker": "^5.2.0",
+    "@rails/webpacker": "^6.0.0-beta.7",
     "@sentry/vue": "^5.30.0",
     "axios": "^0.21.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
@@ -58,13 +58,17 @@
     "vue-upload-component": "^2.8.20",
     "vuelidate": "~0.7.5",
     "vuex": "~2.1.1",
-    "vuex-router-sync": "~4.1.2"
+    "vuex-router-sync": "~4.1.2",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.13.15",
     "@babel/preset-env": "^7.9.5",
     "@vue/test-utils": "^1.0.0-beta.29",
+    "@webpack-cli/serve": "^1.3.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
@@ -90,7 +94,7 @@
     "prettier": "^1.16.4",
     "rimraf": "^3.0.0",
     "vue-jest": "^3.0.5",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.2"
   },
   "engines": {
     "node": ">=10.x",
@@ -121,6 +125,14 @@
     ],
     "*.scss": [
       "scss-lint"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "./node_modules/@rails/webpacker/package/babel/preset.js"
+    ],
+    "plugins": [
+      "./node_modules/@babel/plugin-transform-runtime"
     ]
   }
 }
