@@ -17,7 +17,7 @@ import { IFrameHelper, RNHelper } from 'widget/helpers/utils';
 import Router from './views/Router';
 import { getLocale } from './helpers/urlParamsHelper';
 import { BUS_EVENTS } from 'shared/constants/busEvents';
-import { loadLocaleAsync } from './i18n/initializer';
+import { loadLocaleAsync } from 'shared/initializers/i18n';
 
 export default {
   name: 'App',

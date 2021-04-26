@@ -4,7 +4,6 @@
 /* Vue Core */
 
 import Vue from 'vue';
-import VueI18n from 'vue-i18n';
 import VueRouter from 'vue-router';
 import axios from 'axios';
 // Global Components
@@ -17,7 +16,7 @@ import Vuelidate from 'vuelidate';
 import VTooltip from 'v-tooltip';
 import WootUiKit from '../dashboard/components';
 import App from '../dashboard/App';
-import i18n from '../dashboard/i18n';
+import { i18n } from 'shared/initializers/i18n';
 import createAxios from '../dashboard/helper/APIHelper';
 import commonHelpers from '../dashboard/helper/commons';
 import { getAlertAudio } from '../shared/helpers/AudioNotificationHelper';
@@ -40,7 +39,6 @@ if (window.errorLoggingConfig) {
 }
 
 Vue.use(VueRouter);
-Vue.use(VueI18n);
 Vue.use(WootUiKit);
 Vue.use(Vuelidate);
 Vue.use(VTooltip, {
@@ -51,11 +49,6 @@ Vue.use(hljs.vuePlugin);
 Vue.component('multiselect', Multiselect);
 Vue.component('woot-switch', WootSwitch);
 Vue.component('woot-wizard', WootWizard);
-
-const i18nConfig = new VueI18n({
-  locale: 'en',
-  messages: i18n,
-});
 
 sync(store, router);
 // load common helpers into js
@@ -68,7 +61,7 @@ window.onload = () => {
   window.WOOT = new Vue({
     router,
     store,
-    i18n: i18nConfig,
+    i18n,
     components: { App },
     template: '<App/>',
   }).$mount('#app');

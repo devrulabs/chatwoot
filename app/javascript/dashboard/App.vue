@@ -11,7 +11,7 @@
 import { mapGetters } from 'vuex';
 import WootSnackbarBox from './components/SnackbarContainer';
 import { accountIdFromPathname } from './helper/URLHelper';
-
+import { loadLocaleAsync } from 'shared/initializers/i18n';
 export default {
   name: 'App',
 
@@ -32,8 +32,13 @@ export default {
   },
 
   methods: {
-    setLocale(locale) {
-      this.$root.$i18n.locale = locale;
+    async setLocale(locale) {
+      try {
+        await loadLocaleAsync(locale, 'web');
+        this.$root.$i18n.locale = locale;
+      } catch (error) {
+        // Ignore error
+      }
     },
 
     async initializeAccount() {

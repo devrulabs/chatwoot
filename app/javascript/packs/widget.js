@@ -3,7 +3,7 @@ import Vuelidate from 'vuelidate';
 import store from '../widget/store';
 import App from '../widget/App.vue';
 import ActionCableConnector from '../widget/helpers/actionCable';
-import { i18n } from '../widget/i18n/initializer';
+import { i18n } from 'shared/initializers/i18n';
 
 Vue.use(Vuelidate);
 
