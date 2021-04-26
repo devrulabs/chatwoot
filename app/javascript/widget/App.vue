@@ -14,10 +14,10 @@
 import { mapGetters, mapActions } from 'vuex';
 import { setHeader } from 'widget/helpers/axios';
 import { IFrameHelper, RNHelper } from 'widget/helpers/utils';
-
 import Router from './views/Router';
 import { getLocale } from './helpers/urlParamsHelper';
 import { BUS_EVENTS } from 'shared/constants/busEvents';
+import { loadLocaleAsync } from './i18n/initializer';
 
 export default {
   name: 'App',
@@ -84,10 +84,16 @@ export default {
         label: this.$t('BUBBLE.LABEL'),
       });
     },
-    setLocale(locale) {
+    async setLocale(locale) {
       const { enabledLanguages } = window.chatwootWebChannel;
       if (enabledLanguages.some(lang => lang.iso_639_1_code === locale)) {
-        this.$root.$i18n.locale = locale;
+        try {
+          await loadLocaleAsync(locale);
+          this.$root.$i18n.locale = locale;
+          this.setBubbleLabel();
+        } catch (e) {
+          // Ignore error
+        }
       }
     },
     setPosition(position) {
@@ -144,7 +150,6 @@ export default {
         const message = IFrameHelper.getMessage(e);
         if (message.event === 'config-set') {
           this.setLocale(message.locale);
-          this.setBubbleLabel();
           this.setPosition(message.position);
           this.fetchOldConversations().then(() => this.setUnreadView());
           this.setPopoutDisplay(message.showPopoutButton);
@@ -177,7 +182,6 @@ export default {
           });
         } else if (message.event === 'set-locale') {
           this.setLocale(message.locale);
-          this.setBubbleLabel();
         } else if (message.event === 'set-unread-view') {
           this.showUnreadView = true;
         } else if (message.event === 'unset-unread-view') {

@@ -1,18 +1,11 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
-import VueI18n from 'vue-i18n';
 import store from '../widget/store';
 import App from '../widget/App.vue';
 import ActionCableConnector from '../widget/helpers/actionCable';
-import i18n from '../widget/i18n';
+import { i18n } from '../widget/i18n/initializer';
 
-Vue.use(VueI18n);
 Vue.use(Vuelidate);
-
-const i18nConfig = new VueI18n({
-  locale: 'en',
-  messages: i18n,
-});
 
 // Event Bus
 window.bus = new Vue();
@@ -22,7 +15,7 @@ Vue.config.productionTip = false;
 window.onload = () => {
   window.WOOT_WIDGET = new Vue({
     store,
-    i18n: i18nConfig,
+    i18n: i18n,
     render: h => h(App),
   }).$mount('#app');
 
