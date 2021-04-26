@@ -4,14 +4,15 @@ const customConfig = require('./custom');
 const vueConfig = require('./rules/vue');
 const audioConfig = require('./rules/audio');
 
-delete webpackConfig.module.rules;
-const xx = merge(webpackConfig, vueConfig);
-console.log(xx.module.rules);
+const [
+  htmlRule,
+  assetRule,
+  cssRule,
+  scssRule,
+  jsRule,
+] = webpackConfig.module.rules;
+webpackConfig.module.rules = [htmlRule, jsRule];
 
-try {
-  fs.writeFileSync('./webpack.json', JSON.stringify(xx));
-} catch (err) {
-  console.error(err);
-}
+const finalConfig = merge(vueConfig, audioConfig, customConfig, webpackConfig);
 
-module.exports = xx;
+module.exports = finalConfig;
